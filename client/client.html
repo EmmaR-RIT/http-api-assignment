@@ -1,13 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Our simple HTTP server</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
-  
-  <script>
 
+  <script>
+    const handleResponse = async (res) => {
+      let headers = Object.fromEntries(res.headers);
+      if (headers['content-type'] === 'application/json') {
+        let json = await res.json();
+        displayResponse((json.id) ? json.id : 'Success', json.message);
+        console.log('json')
+      }
+      else if (headers['content-type'] === 'text/xml') {
+        let xml = await res.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(xml, 'text/xml');
+        const message = doc.getElementsByTagName('message')[0]?.childNodes[0]?.nodeValue;
+        const id = doc.getElementsByTagName('id')[0]?.childNodes[0]?.nodeValue;
+        displayResponse(id ? id : 'Success', message);
+      }
+      else {
+        console.error('Wrong content type recieved');
+        displayResponse('Internal Error', 'Server sent the wrong content type');
+      }
+    }
+
+    const displayResponse = (title, message) => {
+      let content = document.querySelector('#content');
+      content.innerHTML = `<p><strong>${title}</strong></p><p>${message}</p>`;
+    }
+
+    const sendFetch = (url, type) => {
+      const options = {
+        method: 'GET',
+        headers: { Accept: type }
+      };
+      fetch(url, options).then(handleResponse);
+    };
+
+    const init = () => {
+      document.querySelector('#send').onclick = () => sendFetch(document.querySelector('#page').value, document.querySelector('#type').value);
+    };
+
+    window.onload = init;
   </script>
 </head>
+
 <body>
   <section id="top">
     <h3>Status Code Tests</h3>
@@ -29,4 +69,5 @@
   <section id="content">
   </section>
 </body>
+
 </html>

@@ -1,0 +1,27 @@
+{
+  "name": "http-api-assignment",
+  "version": "1.0.0",
+  "description": "In this assignment, you will use Node.js to build a simple HTTP API complete with correct status codes and accept headers. You will also need to detect whether the client is requesting xml or json, and respond accordingly. You will need to build an HTTP API that satisfies the following criteria:",
+  "homepage": "https://github.com/EmmaR-RIT/http-api-assignment#readme",
+  "bugs": {
+    "url": "https://github.com/EmmaR-RIT/http-api-assignment/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EmmaR-RIT/http-api-assignment.git"
+  },
+  "license": "ISC",
+  "author": "Emma Rausch",
+  "type": "commonjs",
+  "main": "src/server.js",
+  "scripts": {
+    "pretest": "eslint ./src --fix",
+    "test": "echo \"Tests Complete\"",
+    "start": "node ./src/server.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.11.0",
+    "global": "^4.4.0"
+  }
+}
