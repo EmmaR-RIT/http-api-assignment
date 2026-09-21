@@ -6,6 +6,8 @@
   <link rel="stylesheet" type="text/css" href="/style.css">
 
   <script>
+    // Handles the http response from the server
+    // Checks the data type and parses the data based on what type it is
     const handleResponse = async (res) => {
       let headers = Object.fromEntries(res.headers);
       if (headers['content-type'] === 'application/json') {
@@ -27,11 +29,13 @@
       }
     }
 
+    // Displays the response in the HTML document
     const displayResponse = (title, message) => {
       let content = document.querySelector('#content');
       content.innerHTML = `<p><strong>${title}</strong></p><p>${message}</p>`;
     }
 
+    // Sends a fetch request to the server
     const sendFetch = (url, type) => {
       const options = {
         method: 'GET',
@@ -40,6 +44,7 @@
       fetch(url, options).then(handleResponse);
     };
 
+    // Sets up the submit button
     const init = () => {
       document.querySelector('#send').onclick = () => sendFetch(document.querySelector('#page').value, document.querySelector('#type').value);
     };

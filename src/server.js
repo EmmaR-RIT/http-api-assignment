@@ -4,12 +4,14 @@ const responses = require('./responses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
+// Routes and their respective handlers
 const urlStruct = {
     '/': responses.getIndex,
     '/style.css': responses.getCSS,
     default: responses.getRoute
 };
 
+// Gets information about the request and chooses the correct handler
 const onRequest = (req, res) => {
     const parsedURL = new URL(req.url, `${req.connection.encrypted ? 'https' : 'http'}://${req.headers.host}`);
 

@@ -3,30 +3,37 @@ const fs = require('fs');
 const index = fs.readFileSync(`${__dirname}/../client/client.html`);
 const css = fs.readFileSync(`${__dirname}/../client/style.css`);
 
-
+// Basic response writer
 const respond = (req, res, status, content, type) => {
     res.writeHead(status, { 'Content-Type': type });
     res.write(content);
     res.end();
 };
 
+// Respond with client.html
 const getIndex = (req, res) => {
     respond(req, res, 200, index, 'text/html');
 };
 
+// Respond with style.css
 const getCSS = (req, res) => {
     respond(req, res, 200, css, 'text/css');
 }
 
+// Respond with the correct data and type for the request
 const getRoute = (req, res, path) => {
+    // Init data as if request succeeds
     let status = 200;
     const resData = {
         message: 'This is a successful response.',
     };
 
+    // Check path and alter data accordingly
     switch (path) {
+        // If success, data is already correct
         case '/success':
             break;
+        // Checks for required query parameter
         case '/badRequest':
             if (req.query.valid !== 'true') {
                 resData.message = 'Missing valid query parameter set to true.';
@@ -34,6 +41,7 @@ const getRoute = (req, res, path) => {
                 status = 400;
             }
             break;
+        // Checks for required query parameter
         case '/unauthorized':
             if (req.query.loggedIn !== 'yes') {
                 resData.message = 'Missing loggedIn query parameter set to yes.';
@@ -62,6 +70,7 @@ const getRoute = (req, res, path) => {
             status = 404;
             break;
     }
+    // Check for and send requested data type
     if (req.acceptedTypes[0] === 'text/xml') {
         let resXML = `<response><message>${resData.message}</message>${resData.id ? `<id>${resData.id}</id>` : ''}</response>`;
         console.log(resXML); // eslint-disable-line no-console
